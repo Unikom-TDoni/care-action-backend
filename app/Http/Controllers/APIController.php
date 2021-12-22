@@ -46,7 +46,6 @@ class APIController extends Controller
     function changeProfileCustomer(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'name'      => 'required|string|max:255',
             'birthdate' => 'required|date',
             'gender'    => 'required',
             'weight'    => 'required',
@@ -59,7 +58,7 @@ class APIController extends Controller
         }
 
         $data = [
-            'name'      => $request->name,
+            'name'      => ($request->name!="")?$request->name:Auth::user()->name,
             'birthdate' => $request->birthdate,
             'gender'    => $request->gender,
             'weight'    => $request->weight,
