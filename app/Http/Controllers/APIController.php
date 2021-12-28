@@ -30,6 +30,7 @@ class APIController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
 
+        $data = [];
         foreach($news as $row)
         {
             $row->thumbnail = URL::asset('images/news').'/'.$row->thumbnail;

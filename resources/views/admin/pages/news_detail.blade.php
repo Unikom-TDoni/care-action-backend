@@ -29,7 +29,7 @@
 
                         <div class="form-group">
                             <label>Thumbnail</label>
-                            <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="{{ !isset($data)?'':$data->thumbnail }}" onchange="showThumbnail(this);" {{ !isset($data)?"required":"" }} accept="image/*" />
+                            <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="{{ !isset($data)?'':$data->thumbnail }}" onchange="showThumbnail(this);" {{ !isset($data)?"required":"" }} accept="image/*"/>
                             <input type="hidden" name="old_thumbnail" id="old_thumbnail" value="{{ !isset($data)?'':$data->thumbnail }}">
                         </div>
 

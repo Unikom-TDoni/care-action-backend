@@ -12,10 +12,17 @@ class Category extends Model
     public $timestamps      = false;
     protected $table        = 'category';
     protected $primaryKey   = 'id_category';
-    protected $fillable     = ['category_name'];
+    protected $fillable     = ['category_name', 'icon'];
 
     public function news()
     {
         return $this->hasMany(News::class);
+    }
+
+    public function getNextId() 
+    {
+        $statement = DB::select("show table status like 'category'");
+
+        return $statement[0]->Auto_increment;
     }
 }

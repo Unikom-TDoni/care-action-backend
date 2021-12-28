@@ -62,8 +62,36 @@ class AdminController extends Controller
     
     function saveCategory(Request $request)
     {
+        $classCategory = new Category();
+
+        $id = ($request->id != "")?$request->id:$classCategory->getNextId();
+
+        if ($request->hasFile('icon'))
+        {
+            $destinationPath    = "images/category";
+            $file               = $request->icon;
+            $fileName           = $id.".".$file->getClientOriginalExtension();
+            $pathfile           = $destinationPath.'/'.$fileName;
+
+            if($request->old_icon != "")
+            {
+                File::delete($destinationPath."/".$request->old_icon);
+            }
+
+            $file->move($destinationPath, $fileName); 
+
+            $icon = $fileName;
+        }
+        else
+        {
+            $icon = $request->old_icon;
+        }
+
         $id     = array('id_category'   => $request->id);
-        $data   = array('category_name' => $request->name);
+        $data   = array(
+            'category_name' => $request->name,
+            'icon'          => $icon
+        );
 
         Category::updateOrCreate($id, $data);        
         
@@ -75,7 +103,11 @@ class AdminController extends Controller
 
     function deleteCategory(Request $request)
     {
-        Category::find($request->id)->delete();
+        $data = Category::find($request->id);
+
+        File::delete("images/category/".$data->icon);
+
+        $delete = $data->delete();
     }
 
     function news(Request $request)

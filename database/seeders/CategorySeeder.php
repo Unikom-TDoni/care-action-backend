@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\DB;
 class CategorySeeder extends Seeder
 {
     private $data = [
-        ['category_name' => 'Healthy'],
-        ['category_name' => 'Work Out'],
-        ['category_name' => 'Food'],
+        ['category_name' => 'Healthy', 'icon' => '1.png'],
+        ['category_name' => 'Exercise', 'icon' => '2.png'],
+        ['category_name' => 'Food', 'icon' => '3.png'],
+        ['category_name' => 'Mind', 'icon' => '4.png'],
     ];
 
     /**

@@ -70,6 +70,22 @@
                             </div> 
                         </div> 
                     </div>
+                    <div class="row"> 
+                        <div class="col-md-12"> 
+                            <div class="form-group"> 
+                                <label class="control-label">Icon</label> 
+                                <input type="file" class="form-control" id="icon" name="icon" onchange="showIcon(this);" accept="image/*">
+                                <input type="hidden" name="old_icon" id="old_icon">
+                            </div> 
+                        </div> 
+                    </div>
+                    <div class="row"> 
+                        <div class="col-md-12"> 
+                            <div class="panel panel-default" style="width: 80px;">
+                                <img id="icon_src" style="width:100%"/>
+                            </div>
+                        </div> 
+                    </div>
                 </div>
                 <div class="modal-footer"> 
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close <i class="fa fa-close"></i></button> 
@@ -85,11 +101,14 @@
     {
         $('#edit').modal('show');
         $('#finput')[0].reset();
+        $("#icon").prop('required',true);
+        $("#icon_src").attr("src", "");
     }
 
     function edit(id)
     {
         $('#edit').modal('show');
+        $("#icon").prop('required',false);
 
         $.ajax(
         {
@@ -104,8 +123,23 @@
             {
                 $("#id").val(id);
                 $("#name").val(data.category_name);
+                $("#old_icon").val(data.icon);
+                $("#icon_src").attr("src", "{{ URL::asset('images/category') }}" + "/" + data.icon);
             }
         });
+    }
+
+    function showIcon(input) 
+    {
+        if (input.files && input.files[0]) 
+        {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+            $('#icon_src')
+                .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 
     function deleteData(id)
