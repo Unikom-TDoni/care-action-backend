@@ -20,7 +20,12 @@ class AuthController extends Controller
 
         if($validator->fails())
         {
-            return response()->json($validator->errors());       
+            $response = [
+                'status'    => 'error',
+                'message'   => $validator->errors()->first()
+            ];
+
+            return response()->json($response, 400);       
         }
 
         $customer = Customer::create([
@@ -50,7 +55,22 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        if (!Auth::guard('api')->attempt($request->only('email', 'password')))
+        $validator = Validator::make($request->all(),[
+            'email'     => 'required|string|email',
+            'password'  => 'required|string',
+        ]);
+
+        if($validator->fails())
+        {
+            $response = [
+                'status'    => 'error',
+                'message'   => $validator->errors()->first()
+            ];
+
+            return response()->json($response, 400);       
+        }
+
+        if (!Auth::guard('customer')->attempt($request->only('email', 'password')))
         {
             return response()->json(
             [

@@ -54,7 +54,12 @@ class APIController extends Controller
 
         if($validator->fails())
         {
-            return response()->json($validator->errors());       
+            $response = [
+                'status'    => 'error',
+                'message'   => $validator->errors()->first()
+            ];
+
+            return response()->json($response, 400);       
         }
 
         $data = [
@@ -83,7 +88,12 @@ class APIController extends Controller
         
         if($validator->fails())
         {
-            return response()->json($validator->errors());       
+            $response = [
+                'status'    => 'error',
+                'message'   => $validator->errors()->first()
+            ];
+
+            return response()->json($response, 400);       
         }
 
         if($request->new_password != $request->confirm_new_password)
