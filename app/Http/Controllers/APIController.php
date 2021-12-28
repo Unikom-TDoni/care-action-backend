@@ -33,10 +33,10 @@ class APIController extends Controller
 
     function getDataNews(Request $request)
     {
-        $news = News::with("category", "user")
-                ->where('id_category', $request->id_category)
-                ->orderBy('created_at', 'desc')
-                ->get();
+        $news = News::with("category", "user")->select('news.*', 'category_name')->leftJoin('category', 'news.id_category', '=', 'category.id_category');
+        $news = ($request->exists('id_category') && $request->id_category!="")?$news->where('news.id_category', $request->id_category):$news;
+        $news = ($request->exists('keyword') && $request->keyword)?$news->where('title', 'LIKE', '%'.$request->keyword.'%')->orWhere('category_name', 'LIKE', '%'.$request->keyword.'%'):$news;
+        $news = $news->orderBy('created_at', 'desc')->get();
 
         $data = [];
         foreach($news as $row)
