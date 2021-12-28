@@ -17,8 +17,16 @@ class APIController extends Controller
     {
         $category = Category::orderBy('category_name')->get();
 
+        $data = [];
+        foreach($category as $row)
+        {
+            $row->icon = URL::asset('images/category').'/'.$row->icon;
+            
+            $data[] = $row;
+        }
+
         $ret['status']  = "success";
-        $ret['data']    = $category;
+        $ret['data']    = $data;
 
         return response()->json($ret);
     }
