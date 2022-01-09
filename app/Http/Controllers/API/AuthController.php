@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
 use Auth;
 use Validator;
 use App\Models\Customer;
@@ -36,6 +37,7 @@ class AuthController extends Controller
             'gender'    => $request->gender,
             'weight'    => $request->weight,
             'height'    => $request->height,
+            'picture'   => null,
          ]);
 
         $token = $customer->createToken('auth_token')->plainTextToken;
@@ -80,6 +82,7 @@ class AuthController extends Controller
         }
 
         $customer = Customer::where('email', $request['email'])->firstOrFail();
+        $customer->picture = ($customer->picture != "")?URL::asset('images/customer').'/'.$customer->picture:"";
 
         $token = $customer->createToken('auth_token')->plainTextToken;
 

@@ -30,6 +30,7 @@ class Customer extends Authenticatable
         'gender',
         'weight',
         'height',
+        'picture',
         'password'
     ];
 

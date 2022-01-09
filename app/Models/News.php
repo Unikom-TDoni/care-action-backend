@@ -20,7 +20,8 @@ class News extends Model
         'created_at', 
         'title', 
         'thumbnail',
-        'content'
+        'content',
+        'is_recommended'
     ];
 
     public function category()

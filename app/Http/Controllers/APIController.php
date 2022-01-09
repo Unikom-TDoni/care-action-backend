@@ -41,15 +41,78 @@ class APIController extends Controller
         $data = [];
         foreach($news as $row)
         {
-            $row->thumbnail = URL::asset('images/news').'/'.$row->thumbnail;
-            
-            $data[] = $row;
+            $data[] = [
+                "id_news"       => $row->id_news,
+                "title"         => $row->title,
+                'category_name' => $row->category_name,
+                'thumbnail'     => URL::asset('images/news').'/'.$row->thumbnail,
+            ];
         }
 
         $ret['status']  = "success";
         $ret['data']    = $data;
 
         return response()->json($ret);
+    }
+
+    function getRecommendedNews(Request $request)
+    {
+        $news = News::with("category", "user")
+                ->select('news.*', 'category_name')
+                ->leftJoin('category', 'news.id_category', '=', 'category.id_category')
+                ->where('is_recommended', 1)
+                ->orderBy('created_at', 'desc')
+                ->offset(0)
+                ->limit($request->limit)
+                ->get();
+
+        $data = [];
+        foreach($news as $row)
+        {
+            $data[] = [
+                "id_news"       => $row->id_news,
+                "title"         => $row->title,
+                'category_name' => $row->category_name,
+                'thumbnail'     => URL::asset('images/news').'/'.$row->thumbnail,
+            ];
+        }
+
+        $ret['status']  = "success";
+        $ret['data']    = $data;
+
+        return response()->json($ret);
+    }
+
+    function getDetailNews(Request $request)
+    {
+        $data = News::with("category", "user")
+        ->select('news.*', 'category_name')
+        ->leftJoin('category', 'news.id_category', '=', 'category.id_category')
+        ->where('id_news', $request->id_news)
+        ->first();
+        
+        if(!empty($data))
+        {
+            $data->thumbnail = URL::asset('images/news').'/'.$data->thumbnail;
+
+            $ret['status']  = "success";
+            $ret['data']    = $data;
+        }
+        else
+        {
+            $ret['status']  = "error";
+            $ret['message'] = "News Not Found!";
+        }
+
+        return response()->json($ret);
+    }
+
+    function getProfileCustomer()
+    {
+        $customer = auth()->user();
+        $customer->picture = ($customer->picture != "")?URL::asset('images/customer').'/'.$customer->picture:"";
+        
+        return $customer;
     }
 
     function changeProfileCustomer(Request $request)
@@ -71,12 +134,34 @@ class APIController extends Controller
             return response()->json($response, 400);       
         }
 
+        if ($request->hasFile('picture'))
+        {
+            $destinationPath    = "images/customer";
+            $file               = $request->picture;
+            $fileName           = Auth::user()->id.".".$file->getClientOriginalExtension();
+            $pathfile           = $destinationPath.'/'.$fileName;
+
+            if(Auth::user()->picture != "")
+            {
+                File::delete($destinationPath."/".$request->Auth::user()->picture);
+            }
+
+            $file->move($destinationPath, $fileName); 
+
+            $picture = $fileName;
+        }
+        else
+        {
+            $picture = Auth::user()->picture;
+        }
+
         $data = [
             'name'      => ($request->name!="")?$request->name:Auth::user()->name,
             'birthdate' => $request->birthdate,
             'gender'    => $request->gender,
             'weight'    => $request->weight,
             'height'    => $request->height,
+            'picture'   => $picture,
         ];
 
         Customer::find(Auth::user()->id)->update($data);

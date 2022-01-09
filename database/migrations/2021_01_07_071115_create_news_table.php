@@ -21,6 +21,7 @@ class CreateNewsTable extends Migration
             $table->string('title', 100);
             $table->text('thumbnail')->nullable();
             $table->text('content');
+            $table->unsignedTinyInteger('is_recommended')->default(0);
             $table->foreign('id_category')->references('id_category')->on('category')->onDelete('set null');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('set null');
         });

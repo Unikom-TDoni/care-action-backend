@@ -21,6 +21,7 @@ class CreateCustomerTable extends Migration
             $table->enum('gender', ['Male', 'Female'])->nullable();
             $table->integer('weight')->nullable();
             $table->integer('height')->nullable();
+            $table->text('picture')->nullable();
             $table->text('password');
             $table->rememberToken();
             $table->timestamps();

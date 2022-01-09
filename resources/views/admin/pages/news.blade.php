@@ -64,6 +64,7 @@
                                 <th>Creator</th>
                                 <th>Title</th>
                                 <th>Category</th>
+                                <th>Recommended</th>
                                 <th></th>
                             </tr>
                         </thead>                  
@@ -74,6 +75,8 @@
                                 <td>{{ $data->user->name }}</td>
                                 <td>{{ $data->title }}</td>
                                 <td>{{ $data->category->category_name }}</td>
+                                <td>
+                                    <div class="toggle toggle-success toggle-slide active"></div></td>
                                 <td class="actions">
                                     <a href="{{ url('admin/news/detail/'.$data->id_news) }}" class="btn btn-icon btn-sm btn-success"><i class="fa fa-eye"></i></a>
                                     <button class="btn btn-icon btn-sm btn-danger" onclick="deleteData({{ $data->id_news }})"> <i class="fa fa-trash"></i> </button>
@@ -91,6 +94,12 @@
 
   
 <script>
+    window.onload = function() 
+    {
+        $(".toggle-on").html("YES");
+        $(".toggle-off").html("NO");
+    };
+
     function deleteData(id)
     {
         if(!confirm("Are you sure want to delete this data?")) 
