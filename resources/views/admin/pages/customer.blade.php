@@ -60,7 +60,15 @@
                 <h4 class="modal-title">Customer</h4> 
             </div> 
             <div class="modal-body">
-                <form class="form-horizontal" role="form">     
+                <form class="form-horizontal" role="form">  
+                    <div class="row">
+                        <center>
+                            <div class="panel panel-default" style="width: 120px;">
+                                <img id="picture_src" style="width:100%"/>
+                            </div>
+                        </center>
+                    </div>
+                    
                     <div class="row"> 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Name</label>
@@ -127,7 +135,7 @@
     function detail(id)
     {
         $('#detail').modal('show');
-       
+    
         $.ajax(
         {
             url:"{{ Route('customer.data') }}",
@@ -139,8 +147,6 @@
             dataType : 'json',
             success: function(value)
             {
-                // value = request.data;
-
                 date_tl = new Date(value.birthdate);
                 date_td = new Date(value.created_at);
 
@@ -156,6 +162,7 @@
                 $("#weight").html(value.weight + " kg");
                 $("#height").html(value.height + " cm");
                 $("#created_at").html(created_at);
+                $('#picture_src').attr("src", "{{ URL::asset('images/customer') }}" + "/" + value.picture);
             }
         });
     }

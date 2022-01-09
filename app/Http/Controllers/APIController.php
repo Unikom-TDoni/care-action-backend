@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
 use Auth;
 use Validator;
+use File;
 use App\Models\Customer;
 use App\Models\Category;
 use App\Models\News;
@@ -143,7 +144,7 @@ class APIController extends Controller
 
             if(Auth::user()->picture != "")
             {
-                File::delete($destinationPath."/".$request->Auth::user()->picture);
+                File::delete($destinationPath."/".Auth::user()->picture);
             }
 
             $file->move($destinationPath, $fileName); 
