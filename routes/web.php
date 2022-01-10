@@ -37,6 +37,7 @@ Route::group(['prefix' => 'admin'], function ()
         Route::get('detail/{id}', [AdminController::class, 'showDataNews'])->name('news.detail');
         Route::post('save', [AdminController::class, 'saveNews'])->name('news.save');
         Route::post('delete', [AdminController::class, 'deleteNews'])->name('news.delete');
+        Route::post('recommended', [AdminController::class, 'setRecommendedNews'])->name('news.recommended');
     });
 
     Route::group(['prefix' => 'customer'], function () 

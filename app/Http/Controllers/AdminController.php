@@ -197,6 +197,13 @@ class AdminController extends Controller
         return response()->json($delete);
     }
 
+    function setRecommendedNews(Request $request)
+    {
+        $update = News::find($request->id)->update(['is_recommended' => $request->recommended]);
+
+        return response()->json($update);
+    }
+
     function customer()
     {
         $data = Customer::all();

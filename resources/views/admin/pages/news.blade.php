@@ -76,7 +76,8 @@
                                 <td>{{ $data->title }}</td>
                                 <td>{{ $data->category->category_name }}</td>
                                 <td>
-                                    <div class="toggle toggle-success toggle-slide active"></div></td>
+                                    <input type="checkbox" data-toggle="toggle" value="rec{{ $data->id_news }}" onchange="setIsRecommended({{ $data->id_news }}, this.checked)" {{($data->is_recommended)?"checked":""}}>
+                                </td>
                                 <td class="actions">
                                     <a href="{{ url('admin/news/detail/'.$data->id_news) }}" class="btn btn-icon btn-sm btn-success"><i class="fa fa-eye"></i></a>
                                     <button class="btn btn-icon btn-sm btn-danger" onclick="deleteData({{ $data->id_news }})"> <i class="fa fa-trash"></i> </button>
@@ -94,11 +95,25 @@
 
   
 <script>
-    window.onload = function() 
-    {
-        $(".toggle-on").html("YES");
-        $(".toggle-off").html("NO");
-    };
+    function setIsRecommended(id, is_recommended)
+    { 
+        $.ajax(
+        {
+            url: "{{ Route('news.recommended') }}",
+            type: 'POST',
+            data: 
+            {
+                id: id,
+                recommended: (is_recommended)?1:0,
+                _token: '{{csrf_token()}}'
+            },
+            success: function (response)
+            {
+            }
+        });
+        
+        return false;
+    }
 
     function deleteData(id)
     {
