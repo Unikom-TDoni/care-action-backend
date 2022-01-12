@@ -8,12 +8,23 @@ use Illuminate\Support\Facades\URL;
 use Auth;
 use Validator;
 use File;
+use App\Models\Quotes;
 use App\Models\Customer;
 use App\Models\Category;
 use App\Models\News;
 
 class APIController extends Controller
 {
+    function getQuotes()
+    {
+        $data = Quotes::all()->random(1);
+
+        $ret['status']  = "success";
+        $ret['data']    = $data;
+
+        return response()->json($ret);
+    }
+
     function getDataCategory()
     {
         $category = Category::orderBy('category_name')->get();

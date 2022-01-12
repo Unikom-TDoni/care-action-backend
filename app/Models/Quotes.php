@@ -9,5 +9,5 @@ class Quotes extends Model
     public $timestamps      = false;
     protected $table        = 'quotes';
     protected $primaryKey   = 'id';
-    protected $fillable     = ['quotes'];
+    protected $fillable     = ['quotes', 'creator'];
 }

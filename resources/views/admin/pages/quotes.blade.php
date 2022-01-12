@@ -28,6 +28,7 @@
                         <thead>
                             <tr>
                                 <th>Quotes</th>
+                                <th>Creator</th>
                                 <th width="10%">Action</th>
                             </tr>
                         </thead>                  
@@ -35,6 +36,7 @@
                             @foreach($quotes as $data)
                             <tr class="gradeX">
                                 <td>{{ $data->quotes }}</td>
+                                <td>{{ $data->creator }}</td>
                                 <td class="actions">
                                     <button class="btn btn-icon btn-sm btn-success" onclick="edit({{ $data->id }})"> <i class="fa fa-edit"></i> </button> 
                                     <button class="btn btn-icon btn-sm btn-danger" onclick="deleteData({{ $data->id }})"> <i class="fa fa-trash"></i> </button>
@@ -67,6 +69,14 @@
                             <div class="form-group"> 
                                 <label class="control-label">Quotes</label>
                                 <textarea class="form-control" id="quotes" name="quotes" placeholder="Quotes" rows="4" required></textarea>
+                            </div> 
+                        </div> 
+                    </div>
+                    <div class="row"> 
+                        <div class="col-md-12"> 
+                            <div class="form-group"> 
+                                <label class="control-label">Creator</label>
+                                <input class="form-control" id="creator" name="creator" placeholder="Creator" required>
                             </div> 
                         </div> 
                     </div>
@@ -104,6 +114,7 @@
             {
                 $("#id").val(id);
                 $("#quotes").val(data.quotes);
+                $("#creator").val(data.creator);
             }
         });
     }

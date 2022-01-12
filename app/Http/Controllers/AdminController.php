@@ -63,8 +63,11 @@ class AdminController extends Controller
     
     function saveQuotes(Request $request)
     {
-        $id     = array('id'        => $request->id);
-        $data   = array('quotes'    => $request->quotes);
+        $id     = array('id' => $request->id);
+        $data   = array(
+            'quotes'    => $request->quotes,
+            'creator'   => $request->creator
+        );
 
         Quotes::updateOrCreate($id, $data);        
         

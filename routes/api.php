@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth:sanctum']], function ()
 {
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    Route::any('/quotes', [APIController::class, 'getQuotes']);
     Route::any('/category', [APIController::class, 'getDataCategory']);
     Route::any('/news', [APIController::class, 'getDataNews']);
     Route::any('/news/recommended', [APIController::class, 'getRecommendedNews']);
