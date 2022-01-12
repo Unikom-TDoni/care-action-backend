@@ -30,6 +30,14 @@ Route::group(['prefix' => 'admin'], function ()
         Route::post('delete', [AdminController::class, 'deleteQuotes'])->name('quotes.delete');
     });
     
+    Route::group(['prefix' => 'activity'], function () 
+    {
+        Route::get('/', [AdminController::class, 'activity'])->name('activity');
+        Route::post('data', [AdminController::class, 'getDataActivity'])->name('activity.data');
+        Route::post('save', [AdminController::class, 'saveActivity'])->name('activity.save');
+        Route::post('delete', [AdminController::class, 'deleteActivity'])->name('activity.delete');
+    });
+
     Route::group(['prefix' => 'category'], function () 
     {
         Route::get('/', [AdminController::class, 'category'])->name('category');

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use File;
 
 use App\Models\Quotes;
+use App\Models\Activity;
 use App\Models\Category;
 use App\Models\News;
 use App\Models\Customer;
@@ -25,6 +26,7 @@ class AdminController extends Controller
     function index()
     {
         $total_quotes   = Quotes::all()->count();
+        $total_activity = Activity::all()->count();
         $total_category = Category::all()->count();
         $total_news     = News::all()->count();
         $total_customer = Customer::all()->count();
@@ -82,6 +84,73 @@ class AdminController extends Controller
         $data = Quotes::find($request->id)->delete();
 
         return response()->json($data);
+    }
+
+    function activity()
+    {   
+        $data = Activity::all();
+
+        return view('admin/pages/activity', ['activity' => $data]);
+    }
+
+    function getDataActivity(Request $request)
+    {
+        $data = Activity::find($request->id);
+
+        return response()->json($data);
+    }
+    
+    function saveActivity(Request $request)
+    {
+        $classActivity = new Activity();
+
+        $id = ($request->id != "")?$request->id:$classActivity->getNextId();
+
+        if ($request->hasFile('icon'))
+        {
+            $destinationPath    = "images/activity";
+            $file               = $request->icon;
+            $fileName           = $id.".".$file->getClientOriginalExtension();
+            $pathfile           = $destinationPath.'/'.$fileName;
+
+            if($request->old_icon != "")
+            {
+                File::delete($destinationPath."/".$request->old_icon);
+            }
+
+            $file->move($destinationPath, $fileName); 
+
+            $icon = $fileName;
+        }
+        else
+        {
+            $icon = $request->old_icon;
+        }
+
+        $id     = array('id' => $request->id);
+        $data   = array(
+            'activity_name' => $request->name,
+            'icon'          => $icon,
+            'order'         => $request->order,
+        );
+
+        Activity::updateOrCreate($id, $data);        
+        
+        $process = ($request->id == "")?"created":"updated";
+        $this->swal("activity", $process);
+
+        return redirect('admin/activity');
+    }
+
+    function deleteActivity(Request $request)
+    {
+        $data = Activity::find($request->id);
+
+        File::delete("images/activity/".$data->icon);
+
+        $delete = $data->delete();
+
+        return response()->json($delete);
     }
 
     function category()
@@ -146,6 +215,8 @@ class AdminController extends Controller
         File::delete("images/category/".$data->icon);
 
         $delete = $data->delete();
+        
+        return response()->json($delete);
     }
 
     function news(Request $request)

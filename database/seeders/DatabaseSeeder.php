@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             CategorySeeder::class,
             QuotesSeeder::class,
+            ActivitySeeder::class,
         ]);
     }
 }
