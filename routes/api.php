@@ -24,14 +24,24 @@ Route::group(['middleware' => ['auth:sanctum']], function ()
 
     Route::any('/quotes', [APIController::class, 'getQuotes']);
     Route::any('/category', [APIController::class, 'getDataCategory']);
-    Route::any('/news', [APIController::class, 'getDataNews']);
-    Route::any('/news/recommended', [APIController::class, 'getRecommendedNews']);
-    Route::any('/news/detail', [APIController::class, 'getDetailNews']);
+
+    Route::group(['prefix' => 'news'], function () 
+    {
+        Route::any('/', [APIController::class, 'getDataNews']);
+        Route::post('/recommended', [APIController::class, 'getRecommendedNews']);
+        Route::post('/detail', [APIController::class, 'getDetailNews']);
+    });
 
     Route::group(['prefix' => 'profile'], function () 
     {
         Route::any('/', [APIController::class, 'getProfileCustomer']);
         Route::post('/change', [APIController::class, 'changeProfileCustomer']);
         Route::post('/password', [APIController::class, 'changePasswordCustomer']);
+    });
+
+    Route::group(['prefix' => 'activity'], function () 
+    {
+        Route::any('/', [APIController::class, 'getDataActivity']);
+        Route::post('/checklist', [APIController::class, 'setCheckActivity']);
     });
 });

@@ -19,7 +19,7 @@ class CreateActivityTrackerTable extends Migration
             $table->unsignedBigInteger('id_customer');
             $table->unsignedBigInteger('id_activity');
             $table->foreign('id_customer')->references('id')->on('customer');
-            $table->foreign('id_activity')->references('id')->on('activity_tracker');
+            $table->foreign('id_activity')->references('id')->on('activity');
         });
     }
 

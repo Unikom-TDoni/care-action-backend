@@ -9,12 +9,18 @@ use Auth;
 use Validator;
 use File;
 use App\Models\Quotes;
+use App\Models\Activity;
 use App\Models\Customer;
 use App\Models\Category;
 use App\Models\News;
 
 class APIController extends Controller
 {
+    function __construct()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+    }
+
     function getQuotes()
     {
         $data = Quotes::all()->random(1);
@@ -22,6 +28,51 @@ class APIController extends Controller
         $ret['status']  = "success";
         $ret['data']    = $data;
 
+        return response()->json($ret);
+    }
+
+    function getDataActivity(Request $request)
+    {
+        $classActivity = new Activity();
+
+        $date           = !empty($request->date)?$request->date:date("Y-m-d");
+        $id_customer    = Auth::user()->id;
+
+        $trackers   = $classActivity->getTracker($date, $id_customer)->get();
+        $tracker    = [];
+        foreach($trackers as $row)
+        {
+            $tracker[$row->id_activity] = 1;
+        }
+
+        $activities = Activity::orderBy('order')->get();
+        foreach($activities as $row)
+        {
+            $data[] = [
+                'id'            => $row->id,
+                'activity_name' => $row->activity_name,
+                'icon'          => URL::asset('images/activity').'/'.$row->icon,
+                'checked'       => isset($tracker[$row->id])?1:0
+            ];
+        }
+
+        $ret['status']  = "success";
+        $ret['data']    = $data;
+
+        return response()->json($ret);
+    }
+
+    function setCheckActivity(Request $request)
+    {
+        $classActivity  = new Activity();
+
+        $date           = !empty($request->date)?$request->date:date("Y-m-d");
+        $id_customer    = Auth::user()->id;
+
+        $update = $classActivity->checklistTracker($date, $id_customer, $request->id_activity, $request->checked);
+
+        $ret['status']  = "success";
+        
         return response()->json($ret);
     }
 
