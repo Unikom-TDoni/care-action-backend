@@ -87,10 +87,8 @@ class AdminController extends Controller
     }
 
     function activity()
-    {   
-        $data = Activity::all();
-
-        return view('admin/pages/activity', ['activity' => $data]);
+    {
+        return view('admin/pages/activity');
     }
 
     function getDataActivity(Request $request)
@@ -130,8 +128,7 @@ class AdminController extends Controller
         $id     = array('id' => $request->id);
         $data   = array(
             'activity_name' => $request->name,
-            'icon'          => $icon,
-            'order'         => $request->order,
+            'icon'          => $icon
         );
 
         Activity::updateOrCreate($id, $data);        

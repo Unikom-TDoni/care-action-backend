@@ -24,26 +24,15 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-bordered table-striped" id="datatable">
+                    
+                    <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="5%">Order</th>
                                 <th>Activity Name</th>
                                 <th width="15%">Action</th>
                             </tr>
                         </thead>                  
-                        <tbody>
-                            @foreach($activity as $data)
-                            <tr class="gradeX">
-                                <td>{{ $data->order }}</td>
-                                <td>{{ $data->activity_name }}</td>
-                                <td class="actions">
-                                    <button class="btn btn-icon btn-sm btn-success" onclick="edit({{ $data->id }})"> <i class="fa fa-edit"></i> </button> 
-                                    <button class="btn btn-icon btn-sm btn-danger" onclick="deleteData({{ $data->id }})"> <i class="fa fa-trash"></i> </button>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
+                        @livewire('activities')
                     </table>
                 </div>
                 <!-- end: page -->

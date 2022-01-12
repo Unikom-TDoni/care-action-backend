@@ -62,7 +62,7 @@
         <![endif]-->
 
         <script src="{{URL::asset('assets')}}/js/modernizr.min.js"></script>
-        
+        @livewireStyles
     </head>
 
     <body class="fixed-left">
@@ -371,7 +371,6 @@
         <script type="text/javascript" src="{{URL::asset('assets')}}/assets/spinner/spinner.min.js"></script>
         <script src="{{URL::asset('assets')}}/assets/select2/select2.min.js" type="text/javascript"></script>
 
-
         <script>
             jQuery(document).ready(function() {
                     
@@ -520,5 +519,8 @@
         @endif
     
 
+        @livewireScripts 
+        <script src="/livewire/livewire.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v0.x.x/dist/livewire-sortable.js"></script>
     </body>
 </html>
