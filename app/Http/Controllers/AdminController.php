@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use File;
 
+use App\Models\Quotes;
 use App\Models\Category;
 use App\Models\News;
 use App\Models\Customer;
@@ -23,6 +24,7 @@ class AdminController extends Controller
 
     function index()
     {
+        $total_quotes   = Quotes::all()->count();
         $total_category = Category::all()->count();
         $total_news     = News::all()->count();
         $total_customer = Customer::all()->count();
@@ -43,6 +45,40 @@ class AdminController extends Controller
     {
         $message = "$pages $process successfully!";
         Session::flash('alert_swal','swal("Success!", "'.$message.'", "success");');
+    }
+
+    function quotes()
+    {   
+        $data = Quotes::all();
+
+        return view('admin/pages/quotes', ['quotes' => $data]);
+    }
+
+    function getDataQuotes(Request $request)
+    {
+        $data = Quotes::find($request->id);
+
+        return response()->json($data);
+    }
+    
+    function saveQuotes(Request $request)
+    {
+        $id     = array('id'        => $request->id);
+        $data   = array('quotes'    => $request->quotes);
+
+        Quotes::updateOrCreate($id, $data);        
+        
+        $process = ($request->id == "")?"created":"updated";
+        $this->swal("quotes", $process);
+
+        return redirect('admin/quotes');
+    }
+
+    function deleteQuotes(Request $request)
+    {
+        $data = Quotes::find($request->id)->delete();
+
+        return response()->json($data);
     }
 
     function category()
@@ -130,7 +166,7 @@ class AdminController extends Controller
 
     function showDataNews($id="")
     {
-        $data       = News::with("category", "user")->find($id);
+        $data       = ($id!="")?News::with("category", "user")->find($id):null;
         $category   = Category::orderBy('category_name')->get();
 
         return view('admin/pages/news_detail', [

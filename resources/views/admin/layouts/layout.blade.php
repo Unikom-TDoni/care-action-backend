@@ -134,6 +134,9 @@
                                 <a href="{{ Route('dashboard') }}" class="waves-effect  {{{ (Request::is('admin') ? 'active' : '') }}}"><i class="md md-dashboard"></i>Dashboard</a>
                             </li>
                             <li>
+                                <a href="{{ Route('quotes') }}" class="waves-effect  {{{ (Request::segment(2)=='quotes' ? 'active' : '') }}}"><i class="md md-format-quote"></i>Quotes</a>
+                            </li>
+                            <li>
                                 <a href="{{ Route('category') }}" class="waves-effect  {{{ (Request::segment(2)=='category' ? 'active' : '') }}}"><i class="md md-view-list"></i>Category</a>
                             </li>
                             <li>

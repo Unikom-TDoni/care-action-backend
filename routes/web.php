@@ -21,6 +21,14 @@ Route::get('/', function () {
 Route::group(['prefix' => 'admin'], function () 
 {    
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+
+    Route::group(['prefix' => 'quotes'], function () 
+    {
+        Route::get('/', [AdminController::class, 'quotes'])->name('quotes');
+        Route::post('data', [AdminController::class, 'getDataQuotes'])->name('quotes.data');
+        Route::post('save', [AdminController::class, 'saveQuotes'])->name('quotes.save');
+        Route::post('delete', [AdminController::class, 'deleteQuotes'])->name('quotes.delete');
+    });
     
     Route::group(['prefix' => 'category'], function () 
     {
