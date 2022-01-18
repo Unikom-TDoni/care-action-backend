@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function ()
     {
         Route::any('/', [APIController::class, 'getProfileCustomer']);
         Route::post('/change', [APIController::class, 'changeProfileCustomer']);
+        Route::post('/register', [APIController::class, 'registerProfileCustomer']);
         Route::post('/password', [APIController::class, 'changePasswordCustomer']);
     });
 

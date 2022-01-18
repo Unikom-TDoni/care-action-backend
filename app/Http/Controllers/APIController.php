@@ -178,13 +178,48 @@ class APIController extends Controller
         return $customer;
     }
 
-    function changeProfileCustomer(Request $request)
+    function registerProfileCustomer(Request $request)
     {
         $validator = Validator::make($request->all(),[
             'birthdate' => 'required|date',
             'gender'    => 'required',
             'weight'    => 'required',
             'height'    => 'required',
+        ]);
+
+        if($validator->fails())
+        {
+            $response = [
+                'status'    => 'error',
+                'message'   => $validator->errors()->first()
+            ];
+
+            return response()->json($response, 400);       
+        }
+
+        $data = [
+            'birthdate' => $request->birthdate,
+            'gender'    => $request->gender,
+            'weight'    => $request->weight,
+            'height'    => $request->height,
+        ];
+
+        Customer::find(Auth::user()->id)->update($data);
+
+        $ret['status']  = "success";
+        $ret['message'] = "Profile changed successfully!";
+
+        return response()->json($ret);
+    }
+
+    function changeProfileCustomer(Request $request) {
+
+        $validator = Validator::make($request->all(),[
+            'birthdate' => 'required|date',
+            'gender'    => 'required',
+            'weight'    => 'required',
+            'height'    => 'required',
+            'name' => 'required',
         ]);
 
         if($validator->fails())
@@ -218,22 +253,30 @@ class APIController extends Controller
             $picture = Auth::user()->picture;
         }
 
-        $data = [
-            'name'      => ($request->name!="")?$request->name:Auth::user()->name,
-            'birthdate' => $request->birthdate,
+        $customer = [
+            'name'      => $request->name,
+            'birthdate' => date('Y-m-d', strtotime($request->birthdate)),
             'gender'    => $request->gender,
             'weight'    => $request->weight,
             'height'    => $request->height,
             'picture'   => $picture,
         ];
 
-        Customer::find(Auth::user()->id)->update($data);
+        Customer::find(Auth::user()->id)->update($customer);
 
-        $ret['status']  = "success";
-        $ret['message'] = "Profile changed successfully!";
+        $customer['picture'] = ($picture != "")?URL::asset('images/customer').'/'.$picture:"";
 
-        return response()->json($ret);
+        $response = [
+            'status'    => 'success',
+            'message'   => 'Register successfully',
+            'content'   => [
+                'data'          => $customer,
+            ]
+        ];
+
+        return response()->json($response, 200);
     }
+
 
     function changePasswordCustomer(Request $request)
     {
